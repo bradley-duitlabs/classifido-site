@@ -2,172 +2,225 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Classifido</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&display=swap">
 <style>
-/* -------------------------------------------------------------------------
- * The page ground and the accent are the product's settings surface exactly:
- * --d-s-page #faf8f4, --d-s-accent #0e6455, --d-s-ink #17191b,
- * --d-s-muted-deep #5f6467 (5.65 on this ground). Stated literally because
- * this repo has no tokens file and is not going to grow one for four values.
+/* =========================================================================
+ * THE LOCKUP AND THE SCALE HERE ARE A COPY OF THE SIGN-IN PAGE'S OUTPUT.
+ * =========================================================================
+ *
+ * Every value below -- the variables, the two breakpoints, the wordmark
+ * rules, the cap's placement and its three em steps -- was taken from what
+ * `src/render.py` in the product repo actually rendered, by calling
+ * `render.sign_in_page()` and reading the document it returned. Nothing here
+ * was redrawn, re-derived, or measured off a screenshot.
+ *
+ * **Why a copy and not a third implementation.** The mortarboard's optical
+ * scale is already a deliberate duplication: `web/src/Wordmark.jsx` and
+ * `render.py` both hold it because Python cannot import JSX, and
+ * `tests/test_wordmark_cap.py` keeps the pair honest with a shared ten-input
+ * golden table. A third hand-drawn copy would be a third answer to the same
+ * question with no test behind it. This file is a rendered artifact instead:
+ * when render.py's changes, re-run it and re-copy. See the README.
  * ---------------------------------------------------------------------- */
-:root {
-  --page: #faf8f4;
-  --ink: #17191b;
-  --muted: #5f6467;
-  --accent: #0e6455;
-  --accent-dark: #095a53;
-}
 
-* { box-sizing: border-box; }
+@font-face { font-family: "Source Sans 3"; font-style: normal; font-weight: 400;
+             font-display: swap;
+             src: url("/fonts/SourceSans3-Regular.ttf.woff2") format("woff2"); }
+@font-face { font-family: "Source Sans 3"; font-style: normal; font-weight: 600;
+             font-display: swap;
+             src: url("/fonts/SourceSans3-Semibold.ttf.woff2") format("woff2"); }
 
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; }
 html { -webkit-text-size-adjust: 100%; }
 
+/* The variable block is the sign-in page's, with the rows this page has no
+   element for -- the buttons, the field, the two provider marks -- left out.
+   The values that remain are untouched. */
 body {
   margin: 0;
-  min-height: 100vh;
-  min-height: 100svh;
+  background: #faf8f4;
+  color: #17191b;
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  --pad-top: 67px;
+  --col-pad: 80px;
+  --col-max: 620px;
+  --col-gap: 40px;
+  --mark: 128px;
+  --wordmark: 46px;
+  --tagline: 21px;
+  --small: 16px;
+  --action: 364px;
+  --watermark: 500px;
+}
+@media (max-width: 1014px) {
+  body {
+    --pad-top: 273px; --col-pad: 64px; --col-max: 560px; --col-gap: 36px;
+    --mark: 116px; --wordmark: 42px; --tagline: 20px; --small: 15.5px;
+    --action: 344px; --watermark: 460px;
+  }
+}
+@media (max-width: 612px) {
+  body {
+    --pad-top: 161px; --col-pad: 26px; --col-max: 390px; --col-gap: 26px;
+    --mark: 88px; --wordmark: 33px; --tagline: 17px; --small: 14.5px;
+    --action: 100%; --watermark: 300px;
+  }
+}
+
+/* **Top-anchored and not centred**, which is the sign-in page's own comment
+   and its own rule. The apex page was vertically centred before this; it is
+   not any more, so the mark, the lockup and the line sit exactly where a
+   family meets them one click later. */
+.frame {
+  position: relative;
+  overflow: hidden;
+  min-height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background: var(--page);
-  color: var(--ink);
-  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont,
-               'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  font-weight: 400;
-  line-height: 1.5;
-  /* A safe-area pad so the column clears a phone's home indicator and a
-     landscape notch. */
-  padding: 2rem max(1.5rem, env(safe-area-inset-left))
-           calc(2rem + env(safe-area-inset-bottom))
-           max(1.5rem, env(safe-area-inset-right));
+  justify-content: flex-start;
+  padding-top: var(--pad-top);
+  /* Not the sign-in page's. A phone's home indicator is this page's problem
+     because this page can be the first thing a link opens, with none of the
+     sign-in flow's chrome below it. */
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
 }
-
-main {
+.watermark {
+  position: absolute;
+  right: -4%;
+  bottom: -8%;
+  pointer-events: none;
+  width: var(--watermark);
+  height: var(--watermark);
+}
+.column {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--col-gap);
+  padding: 0 var(--col-pad);
   width: 100%;
-  max-width: 30rem;
+  max-width: var(--col-max);
+}
+.mark { display: block; border-radius: 24%; width: var(--mark); height: var(--mark); }
+.type { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.wordmark {
+  font-weight: 600;
+  letter-spacing: -.015em;
+  line-height: 1;
+  white-space: nowrap;
+  color: #17191b;
+  font-size: var(--wordmark);
+}
+/* The dotless i, carrying the cap. In `em` so it holds at every size. */
+.i { position: relative; display: inline-block; line-height: 1; margin: 0 .06em; }
+/* **No width or height here.** The cap is on a three-step scale keyed to the
+   type size and this screen crosses a threshold between its own breakpoints,
+   so the size comes from the three rules at the foot of this file -- which are
+   `sign_in_cap_css()`'s output, character for character. What is left is the
+   placement, which does not vary by step. */
+.cap {
+  position: absolute;
+  left: 50%;
+  bottom: .60em;
+  transform: translateX(-50%);
+}
+.fido { color: #b8783c; }
+.tagline {
+  color: #4a4f52;
   text-align: center;
-}
-
-/* The mark is sized here and never by an attribute on the svg, which is the
-   rule the product's own Wordmark.jsx states: a CSS width silently beats an
-   attribute, so the attribute would be a floor any caller could move. */
-.mark {
-  display: block;
-  width: clamp(4.5rem, 14vmin, 6.5rem);
-  height: auto;
-  margin: 0 auto 1.5rem;
-}
-
-h1 {
+  line-height: 1.45;
+  font-size: var(--tagline);
   margin: 0;
-  font-size: clamp(2.25rem, 7vmin, 3.25rem);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.1;
 }
 
-.line {
-  margin: 0.75rem 0 0;
-  font-size: clamp(1.0625rem, 2.6vmin, 1.25rem);
-  color: var(--muted);
+/* The group under the line sits where the sign-in page's `.action` sits, at
+   its width and its 26px. What it holds is links rather than buttons, because
+   this page has nothing to submit. */
+.action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  width: var(--action);
+  max-width: 100%;
 }
-
-/* ------------------------------------------------------------------ links
- *
- * One face, taken from web/src/link.css in the product repo and not a second
- * one invented here: dotted 1px at 3px offset, solid 1.5px on hover. Every
- * link on this page is an action link -- a control we wrote, not a sentence
- * somebody else's prose runs through -- so all four take the accent at 600.
- *
- * Underlined at rest on every device, because the iPad this page is read on
- * has no hover and a link that grows its underline on :hover has no
- * affordance until it is touched. The hover moves the underline's weight
- * rather than producing one.
- */
-a {
-  color: var(--accent);
-  font-weight: 600;
-  text-decoration: underline dotted;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-}
-
-a:hover {
-  text-decoration-style: solid;
-  text-decoration-thickness: 1.5px;
-  color: var(--accent-dark);
-}
-
-a:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: 2px;
-}
-
 nav {
-  margin-top: 2.25rem;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  /* Column-gap carries the separator's breathing room; row-gap is what keeps
-     the three readable when a narrow phone wraps them. */
-  gap: 0.75rem 1.5rem;
-  font-size: clamp(1.0625rem, 2.6vmin, 1.125rem);
+  /* Column-gap is the separator's room; row-gap is what keeps the three
+     readable if a narrow phone wraps them. */
+  gap: 4px 28px;
 }
 
-/* A touch target that clears 44px on a phone without moving the type. The
-   pad is what gets it there: at the phone's type size the line box alone is
-   about 25px, so 0.65rem top and bottom is the whole of the difference. */
-nav a, .contact a {
+/* ------------------------------------------------------------------ links
+ *
+ * The face is `web/src/link.css`'s, and the sign-in page's `.secondary`
+ * carries the same three declarations for the same reason -- dotted 1px at
+ * 3px offset, solid 1.5px on hover. Underlined at rest because the iPad this
+ * page is read on has no hover.
+ *
+ * **600 is the one deliberate departure from `.secondary`.** That control is
+ * a de-emphasised way out from under a white button; these links are the only
+ * controls on this page, and `link.css` states an action link takes the
+ * accent and 600. Reported rather than taken quietly.
+ */
+a {
+  color: #0e6455;
+  font-weight: 600;
+  font-size: var(--small);
+  text-decoration: underline dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  /* **A 44px touch target that costs the copied rhythm nothing.** The line
+     box at the phone's --small is about 20px, so 13px top and bottom is what
+     gets there -- but that pad is invisible, and left alone it would push the
+     group 26px further from the line than the sign-in page's `.action` sits.
+     The negative margins below give exactly that pad back to the layout, so
+     the gaps a reader SEES are the 26px and the --col-gap that were copied,
+     while the box a finger lands on is 46px. */
   display: inline-block;
-  padding: 0.65rem 0.25rem;
+  padding: 13px 4px;
 }
+a:hover {
+  text-decoration-style: solid;
+  text-decoration-thickness: 1.5px;
+}
+/* The sign-in page's own focus ring, off `.address:focus-visible`. */
+a:focus-visible { outline: 2px solid #0e6455; outline-offset: 1px; border-radius: 2px; }
 
-.contact {
-  margin: 1.75rem 0 0;
-  font-size: 1rem;
-}
+/* The give-back for the pad above; see the note on `a`. */
+nav, .contact { margin: -13px 0; }
+
+/* ---------------------------------------------- sign_in_cap_css(), verbatim */
+.cap { width: .40em; height: .304em; }
+@media (max-width: 1014px) { .cap { width: .40em; height: .304em; } }
+@media (max-width: 612px) { .cap { width: .42em; height: .319em; } }
 </style>
 </head>
 <body>
-<main>
-  <!-- The mark, shape for shape as it stands in the product's
-       assets/signin/mark-4c-tile.svg. The fills stay literal: the brand file
-       says do not redraw and do not recolour, and two of them only happen to
-       equal this product's ink and accent. -->
-  <svg class="mark" viewBox="0 0 120 120" role="img" aria-label="Classifido">
-    <rect x="11" y="34" width="23" height="54" rx="11.5" fill="#b8783c"/>
-    <rect x="86" y="34" width="23" height="54" rx="11.5" fill="#b8783c"/>
-    <rect x="29.5" y="30" width="61" height="53" rx="24" fill="#dda05c"/>
-    <rect x="41.5" y="64" width="37" height="39" rx="18.5" fill="#f0c896"/>
-    <rect x="52.5" y="80" width="15" height="11" rx="5.5" fill="#17191b"/>
-    <rect x="19" y="43" width="34" height="27" rx="10.5" fill="#f2eee6"/>
-    <rect x="67" y="43" width="34" height="27" rx="10.5" fill="#f2eee6"/>
-    <circle cx="36" cy="56.5" r="6" fill="#17191b"/>
-    <circle cx="84" cy="56.5" r="6" fill="#17191b"/>
-    <g fill="none" stroke="#17191b" stroke-width="6">
-      <rect x="19" y="43" width="34" height="27" rx="10.5"/>
-      <rect x="67" y="43" width="34" height="27" rx="10.5"/>
-    </g>
-    <rect x="52" y="52.5" width="16" height="8" rx="2" fill="#17191b"/>
-  </svg>
-
-  <h1>Classifido</h1>
-  <p class="line">Your school week in one place.</p>
-
-  <nav>
-    <a href="https://app.classifido.com">Sign in</a>
-    <a href="/privacy">Privacy</a>
-    <a href="/terms">Terms</a>
-  </nav>
-
-  <p class="contact"><a href="mailto:hello@classifido.com">hello@classifido.com</a></p>
-</main>
+<div class="frame">
+<img class="watermark" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgMTIwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCI+CjxyZWN0IHg9IjExIiB5PSIzNCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjU0IiByeD0iMTEuNSIgZmlsbD0iI2Q3ZTJkNyI+PC9yZWN0Pgo8cmVjdCB4PSI4NiIgeT0iMzQiIHdpZHRoPSIyMyIgaGVpZ2h0PSI1NCIgcng9IjExLjUiIGZpbGw9IiNkN2UyZDciPjwvcmVjdD4KPHJlY3QgeD0iMjkuNSIgeT0iMzAiIHdpZHRoPSI2MSIgaGVpZ2h0PSI1MyIgcng9IjI0IiBmaWxsPSIjZTRlYmU0Ij48L3JlY3Q+CjxyZWN0IHg9IjQxLjUiIHk9IjY0IiB3aWR0aD0iMzciIGhlaWdodD0iMzkiIHJ4PSIxOC41IiBmaWxsPSIjZWZmNGVmIj48L3JlY3Q+CjxyZWN0IHg9IjUyLjUiIHk9IjgwIiB3aWR0aD0iMTUiIGhlaWdodD0iMTEiIHJ4PSI1LjUiIGZpbGw9IiNjMmQwYzIiPjwvcmVjdD4KPHJlY3QgeD0iMTkiIHk9IjQzIiB3aWR0aD0iMzQiIGhlaWdodD0iMjciIHJ4PSIxMC41IiBmaWxsPSIjZjRmN2Y0Ij48L3JlY3Q+CjxyZWN0IHg9IjY3IiB5PSI0MyIgd2lkdGg9IjM0IiBoZWlnaHQ9IjI3IiByeD0iMTAuNSIgZmlsbD0iI2Y0ZjdmNCI+PC9yZWN0Pgo8Y2lyY2xlIGN4PSIzNiIgY3k9IjU2LjUiIHI9IjYiIGZpbGw9IiNjMmQwYzIiPjwvY2lyY2xlPgo8Y2lyY2xlIGN4PSI4NCIgY3k9IjU2LjUiIHI9IjYiIGZpbGw9IiNjMmQwYzIiPjwvY2lyY2xlPgo8ZyBmaWxsPSJub25lIiBzdHJva2U9IiNjMmQwYzIiIHN0cm9rZS13aWR0aD0iNiI+CjxyZWN0IHg9IjE5IiB5PSI0MyIgd2lkdGg9IjM0IiBoZWlnaHQ9IjI3IiByeD0iMTAuNSI+PC9yZWN0Pgo8cmVjdCB4PSI2NyIgeT0iNDMiIHdpZHRoPSIzNCIgaGVpZ2h0PSIyNyIgcng9IjEwLjUiPjwvcmVjdD4KPC9nPgo8cmVjdCB4PSI1MiIgeT0iNTIuNSIgd2lkdGg9IjE2IiBoZWlnaHQ9IjgiIHJ4PSIyIiBmaWxsPSIjYzJkMGMyIj48L3JlY3Q+Cjwvc3ZnPgo=" alt="" aria-hidden="true">
+<div class="column">
+<img class="mark" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgMTIwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCI+CjxyZWN0IHg9IjExIiB5PSIzNCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjU0IiByeD0iMTEuNSIgZmlsbD0iI2I4NzgzYyI+PC9yZWN0Pgo8cmVjdCB4PSI4NiIgeT0iMzQiIHdpZHRoPSIyMyIgaGVpZ2h0PSI1NCIgcng9IjExLjUiIGZpbGw9IiNiODc4M2MiPjwvcmVjdD4KPHJlY3QgeD0iMjkuNSIgeT0iMzAiIHdpZHRoPSI2MSIgaGVpZ2h0PSI1MyIgcng9IjI0IiBmaWxsPSIjZGRhMDVjIj48L3JlY3Q+CjxyZWN0IHg9IjQxLjUiIHk9IjY0IiB3aWR0aD0iMzciIGhlaWdodD0iMzkiIHJ4PSIxOC41IiBmaWxsPSIjZjBjODk2Ij48L3JlY3Q+CjxyZWN0IHg9IjUyLjUiIHk9IjgwIiB3aWR0aD0iMTUiIGhlaWdodD0iMTEiIHJ4PSI1LjUiIGZpbGw9IiMxNzE5MWIiPjwvcmVjdD4KPHJlY3QgeD0iMTkiIHk9IjQzIiB3aWR0aD0iMzQiIGhlaWdodD0iMjciIHJ4PSIxMC41IiBmaWxsPSIjZjJlZWU2Ij48L3JlY3Q+CjxyZWN0IHg9IjY3IiB5PSI0MyIgd2lkdGg9IjM0IiBoZWlnaHQ9IjI3IiByeD0iMTAuNSIgZmlsbD0iI2YyZWVlNiI+PC9yZWN0Pgo8Y2lyY2xlIGN4PSIzNiIgY3k9IjU2LjUiIHI9IjYiIGZpbGw9IiMxNzE5MWIiPjwvY2lyY2xlPgo8Y2lyY2xlIGN4PSI4NCIgY3k9IjU2LjUiIHI9IjYiIGZpbGw9IiMxNzE5MWIiPjwvY2lyY2xlPgo8ZyBmaWxsPSJub25lIiBzdHJva2U9IiMxNzE5MWIiIHN0cm9rZS13aWR0aD0iNiI+CjxyZWN0IHg9IjE5IiB5PSI0MyIgd2lkdGg9IjM0IiBoZWlnaHQ9IjI3IiByeD0iMTAuNSI+PC9yZWN0Pgo8cmVjdCB4PSI2NyIgeT0iNDMiIHdpZHRoPSIzNCIgaGVpZ2h0PSIyNyIgcng9IjEwLjUiPjwvcmVjdD4KPC9nPgo8cmVjdCB4PSI1MiIgeT0iNTIuNSIgd2lkdGg9IjE2IiBoZWlnaHQ9IjgiIHJ4PSIyIiBmaWxsPSIjMTcxOTFiIj48L3JlY3Q+Cjwvc3ZnPgo=" alt="" aria-hidden="true">
+<div class="type">
+<div class="wordmark" aria-label="Classifido">Class<span class="i">ı<img class="cap" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNzYiIHdpZHRoPSIxMDAiIGhlaWdodD0iNzYiPgo8cmVjdCB4PSIzNCIgeT0iMjIiIHdpZHRoPSIzMiIgaGVpZ2h0PSIxOCIgcng9IjQiIGZpbGw9IiMwZTY0NTUiPjwvcmVjdD4KPHBhdGggZD0iTTUwIDIgTDk4IDIyIEw1MCA0MiBMMiAyMiBaIiBmaWxsPSIjMTcxOTFiIj48L3BhdGg+CjxyZWN0IHg9Ijg2IiB5PSIyMiIgd2lkdGg9IjUiIGhlaWdodD0iMjYiIHJ4PSIyLjUiIGZpbGw9IiNkZGEwNWMiPjwvcmVjdD4KPGNpcmNsZSBjeD0iODguNSIgY3k9IjU0IiByPSI3IiBmaWxsPSIjZGRhMDVjIj48L2NpcmNsZT4KPC9zdmc+Cg==" alt="" aria-hidden="true"></span><span class="fido">Fido</span></div>
+<p class="tagline">Your school week in one place.</p>
+</div>
+<div class="action">
+<nav>
+<a href="https://app.classifido.com">Sign in</a>
+<a href="/privacy">Privacy</a>
+<a href="/terms">Terms</a>
+</nav>
+<p class="contact"><a href="mailto:hello@classifido.com">hello@classifido.com</a></p>
+</div>
+</div>
+</div>
 </body>
 </html>

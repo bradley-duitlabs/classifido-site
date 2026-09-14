@@ -2,44 +2,75 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Privacy &middot; Classifido</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&display=swap">
 <style>
 /* A placeholder so this URL is neither a 404 nor a blank page. The real
-   content lands next trip; the ground, ink and type are the landing page's. */
+   content lands next trip. The ground, the ink, the faces and the muted body
+   colour are the sign-in page's, copied through index.html -- see the README
+   for where they came from. */
+@font-face { font-family: "Source Sans 3"; font-style: normal; font-weight: 400;
+             font-display: swap;
+             src: url("/fonts/SourceSans3-Regular.ttf.woff2") format("woff2"); }
+@font-face { font-family: "Source Sans 3"; font-style: normal; font-weight: 600;
+             font-display: swap;
+             src: url("/fonts/SourceSans3-Semibold.ttf.woff2") format("woff2"); }
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; }
+html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
-  min-height: 100vh;
-  min-height: 100svh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: #faf8f4;
   color: #17191b;
-  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont,
-               'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  font-weight: 400;
-  line-height: 1.5;
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  --pad-top: 67px;
+  --col-pad: 80px;
+  --col-max: 620px;
+  --heading: 46px;
+  --tagline: 21px;
+}
+@media (max-width: 1014px) {
+  body { --pad-top: 273px; --col-pad: 64px; --col-max: 560px;
+         --heading: 42px; --tagline: 20px; }
+}
+@media (max-width: 612px) {
+  body { --pad-top: 161px; --col-pad: 26px; --col-max: 390px;
+         --heading: 33px; --tagline: 17px; }
+}
+.frame {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: var(--pad-top);
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+}
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 0 var(--col-pad);
+  width: 100%;
+  max-width: var(--col-max);
   text-align: center;
-  padding: 2rem 1.5rem;
 }
 h1 {
   margin: 0;
-  font-size: clamp(1.75rem, 5.5vmin, 2.5rem);
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: -.015em;
+  line-height: 1;
+  font-size: var(--heading);
 }
-p { margin: 0.75rem 0 0; color: #5f6467; font-size: 1.0625rem; }
+p { margin: 0; color: #4a4f52; line-height: 1.45; font-size: var(--tagline); }
 </style>
 </head>
 <body>
-<main>
-  <h1>Privacy</h1>
-  <p>Coming soon.</p>
-</main>
+<div class="frame"><div class="column">
+<h1>Privacy</h1>
+<p>Coming soon.</p>
+</div></div>
 </body>
 </html>
