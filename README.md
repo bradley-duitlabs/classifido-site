@@ -4,6 +4,18 @@ The static site at [classifido.com](https://classifido.com). No build step, no
 framework, no dependencies, no JavaScript: GitHub Pages serves these files as
 they are.
 
+## One stylesheet
+
+`site.css` is the whole site's answer to how it looks: the two faces, the
+ground, the ink, the muted ink, the accent, the variable block, the two
+breakpoints, the link face and the document type scale. Every page links it
+and declares nothing of its own that it already answers.
+
+It exists because that block was in three copies -- `index.html` and the two
+placeholders -- the moment the second page appeared, and three copies of one
+answer are three answers waiting to drift. Only rules with no element on any
+other page stay inline, which today is the lockup in `index.html`.
+
 ## The lockup is a copy, not an implementation
 
 **The ClassıFido lockup on `index.html` — its markup, the mortarboard cap's
@@ -31,12 +43,19 @@ From a checkout of the product repo:
 python -c "import sys; sys.path.insert(0,'src'); import render; print(render.sign_in_page('/start'))" > signin.html
 ```
 
-The values to lift are the `body` variable block and its two `@media` blocks,
-the `.frame` / `.watermark` / `.column` / `.mark` / `.type` / `.wordmark` /
-`.i` / `.cap` / `.fido` / `.tagline` rules, the three `.cap` size rules that
-`render.sign_in_cap_css()` appends, the `<div class="wordmark">` run, and the
-three `data:` URIs on the watermark, mark and cap images. The fonts in
-`fonts/` are the same files the product serves, from `assets/fonts/`.
+The values to lift land in two files now.
+
+Into **`site.css`**: the two `@font-face` rules, the reset, the `body` ground
+and ink, the variable block and its two `@media` blocks, and the link face.
+
+Into **`index.html`**: the `.frame` / `.watermark` / `.column` / `.mark` /
+`.type` / `.wordmark` / `.i` / `.cap` / `.fido` / `.tagline` rules, the three
+`.cap` size rules that `render.sign_in_cap_css()` appends, the
+`<div class="wordmark">` run, and the three `data:` URIs on the watermark,
+mark and cap images.
+
+The fonts in `fonts/` are the same files the product serves, from
+`assets/fonts/`.
 
 ## What this repo deliberately does not match
 
@@ -52,8 +71,23 @@ three `data:` URIs on the watermark, mark and cap images. The fonts in
 ## Pages
 
 - `/` — the landing page.
-- `/privacy`, `/terms` — placeholders. Real content is pending the legal entity
-  name; they carry the page title and "Coming soon." and nothing else.
+- `/privacy`, `/terms` — the privacy policy and the terms of service. **The
+  prose in both is approved copy and is reproduced exactly**; the only things
+  this repo added are the markup, the two `mailto:` links, the cross-reference
+  from the terms' "Ending it" to `/privacy`, and the footer row. Anything that
+  changes a word belongs upstream of this repo, not in it.
+
+### A document page
+
+Both are the same three-part shape: `.page` (the pad and the ground),
+`.doc` (the measure), and a `.footer` holding the way back. The measure is
+`58ch` written on `.doc` itself and deliberately NOT hoisted into a custom
+property -- `ch` resolves where it is declared, so on `body`, which has no
+font-size of its own, it would quietly mean 58 characters of the browser's
+16px default and stop tracking the type scale at every breakpoint.
+
+Running text is left-ranged, which the landing page is not. Three centred
+lines under a mark are a lockup; nine pages of centred prose are unreadable.
 
 ## DNS
 

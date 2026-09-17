@@ -4,16 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Classifido</title>
+<link rel="stylesheet" href="/site.css">
 <style>
 /* =========================================================================
- * THE LOCKUP AND THE SCALE HERE ARE A COPY OF THE SIGN-IN PAGE'S OUTPUT.
+ * THE LOCKUP HERE IS A COPY OF THE SIGN-IN PAGE'S OUTPUT.
  * =========================================================================
  *
- * Every value below -- the variables, the two breakpoints, the wordmark
- * rules, the cap's placement and its three em steps -- was taken from what
- * `src/render.py` in the product repo actually rendered, by calling
- * `render.sign_in_page()` and reading the document it returned. Nothing here
- * was redrawn, re-derived, or measured off a screenshot.
+ * Every value below -- the wordmark rules, the cap's placement and its three
+ * em steps -- was taken from what `src/render.py` in the product repo
+ * actually rendered, by calling `render.sign_in_page()` and reading the
+ * document it returned. Nothing here was redrawn, re-derived, or measured
+ * off a screenshot.
  *
  * **Why a copy and not a third implementation.** The mortarboard's optical
  * scale is already a deliberate duplication: `web/src/Wordmark.jsx` and
@@ -22,52 +23,12 @@
  * golden table. A third hand-drawn copy would be a third answer to the same
  * question with no test behind it. This file is a rendered artifact instead:
  * when render.py's changes, re-run it and re-copy. See the README.
+ *
+ * **The faces, the ground, the ink, the accent, the variable block and the
+ * link face are NOT here.** They are the whole site's, not this page's, and
+ * they live once in `/site.css`. Only the rules below have no element on any
+ * other page.
  * ---------------------------------------------------------------------- */
-
-@font-face { font-family: "Source Sans 3"; font-style: normal; font-weight: 400;
-             font-display: swap;
-             src: url("/fonts/SourceSans3-Regular.ttf.woff2") format("woff2"); }
-@font-face { font-family: "Source Sans 3"; font-style: normal; font-weight: 600;
-             font-display: swap;
-             src: url("/fonts/SourceSans3-Semibold.ttf.woff2") format("woff2"); }
-
-*, *::before, *::after { box-sizing: border-box; }
-html, body { height: 100%; }
-html { -webkit-text-size-adjust: 100%; }
-
-/* The variable block is the sign-in page's, with the rows this page has no
-   element for -- the buttons, the field, the two provider marks -- left out.
-   The values that remain are untouched. */
-body {
-  margin: 0;
-  background: #faf8f4;
-  color: #17191b;
-  font-family: "Source Sans 3", system-ui, sans-serif;
-  --pad-top: 67px;
-  --col-pad: 80px;
-  --col-max: 620px;
-  --col-gap: 40px;
-  --mark: 128px;
-  --wordmark: 46px;
-  --tagline: 21px;
-  --small: 16px;
-  --action: 364px;
-  --watermark: 500px;
-}
-@media (max-width: 1014px) {
-  body {
-    --pad-top: 273px; --col-pad: 64px; --col-max: 560px; --col-gap: 36px;
-    --mark: 116px; --wordmark: 42px; --tagline: 20px; --small: 15.5px;
-    --action: 344px; --watermark: 460px;
-  }
-}
-@media (max-width: 612px) {
-  body {
-    --pad-top: 161px; --col-pad: 26px; --col-max: 390px; --col-gap: 26px;
-    --mark: 88px; --wordmark: 33px; --tagline: 17px; --small: 14.5px;
-    --action: 100%; --watermark: 300px;
-  }
-}
 
 /* **Top-anchored and not centred**, which is the sign-in page's own comment
    and its own rule. The apex page was vertically centred before this; it is
@@ -148,54 +109,9 @@ body {
   width: var(--action);
   max-width: 100%;
 }
-nav {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  /* Column-gap is the separator's room; row-gap is what keeps the three
-     readable if a narrow phone wraps them. */
-  gap: 4px 28px;
-}
-
-/* ------------------------------------------------------------------ links
- *
- * The face is `web/src/link.css`'s, and the sign-in page's `.secondary`
- * carries the same three declarations for the same reason -- dotted 1px at
- * 3px offset, solid 1.5px on hover. Underlined at rest because the iPad this
- * page is read on has no hover.
- *
- * **600 is the one deliberate departure from `.secondary`.** That control is
- * a de-emphasised way out from under a white button; these links are the only
- * controls on this page, and `link.css` states an action link takes the
- * accent and 600. Reported rather than taken quietly.
- */
-a {
-  color: #0e6455;
-  font-weight: 600;
-  font-size: var(--small);
-  text-decoration: underline dotted;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  /* **A 44px touch target that costs the copied rhythm nothing.** The line
-     box at the phone's --small is about 20px, so 13px top and bottom is what
-     gets there -- but that pad is invisible, and left alone it would push the
-     group 26px further from the line than the sign-in page's `.action` sits.
-     The negative margins below give exactly that pad back to the layout, so
-     the gaps a reader SEES are the 26px and the --col-gap that were copied,
-     while the box a finger lands on is 46px. */
-  display: inline-block;
-  padding: 13px 4px;
-}
-a:hover {
-  text-decoration-style: solid;
-  text-decoration-thickness: 1.5px;
-}
-/* The sign-in page's own focus ring, off `.address:focus-visible`. */
-a:focus-visible { outline: 2px solid #0e6455; outline-offset: 1px; border-radius: 2px; }
-
-/* The give-back for the pad above; see the note on `a`. */
-nav, .contact { margin: -13px 0; }
+/* The row's layout is `/site.css`'s. Centring it under the lockup is this
+   page's, and only this page's. */
+nav { justify-content: center; }
 
 /* ---------------------------------------------- sign_in_cap_css(), verbatim */
 .cap { width: .40em; height: .304em; }

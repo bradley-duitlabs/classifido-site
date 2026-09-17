@@ -1,0 +1,206 @@
+/* =========================================================================
+ * THE ONE STYLESHEET. Every page in this repo links this file and declares
+ * nothing of its own that this file already answers.
+ * =========================================================================
+ *
+ * The faces, the ground, the ink, the accent and the whole type scale below
+ * were lifted out of `index.html`, which took them from what `src/render.py`
+ * in the product repo actually rendered -- see the README. They lived in
+ * three copies (index, privacy, terms) until the two documents landed;
+ * three copies of one answer is three answers waiting to drift, so they are
+ * here once now. Re-copying from render.py means editing THIS file.
+ *
+ * What is NOT here: the lockup. `.frame` / `.watermark` / `.mark` / `.type`
+ * / `.wordmark` / `.i` / `.cap` / `.fido` and the three cap size rules stay
+ * inline in `index.html`, because they are a rendered artifact of one
+ * function and only that page has an element for any of them.
+ * ---------------------------------------------------------------------- */
+
+@font-face { font-family: "Source Sans 3"; font-style: normal; font-weight: 400;
+             font-display: swap;
+             src: url("/fonts/SourceSans3-Regular.ttf.woff2") format("woff2"); }
+@font-face { font-family: "Source Sans 3"; font-style: normal; font-weight: 600;
+             font-display: swap;
+             src: url("/fonts/SourceSans3-Semibold.ttf.woff2") format("woff2"); }
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; }
+html { -webkit-text-size-adjust: 100%; }
+
+/* The variable block is the sign-in page's, with the rows this site has no
+   element for -- the buttons, the field, the two provider marks -- left out.
+   The values that remain are untouched. */
+body {
+  margin: 0;
+  background: #faf8f4;
+  color: #17191b;
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  --pad-top: 67px;
+  --col-pad: 80px;
+  --col-max: 620px;
+  --col-gap: 40px;
+  --mark: 128px;
+  --wordmark: 46px;
+  --tagline: 21px;
+  --small: 16px;
+  --action: 364px;
+  --watermark: 500px;
+}
+@media (max-width: 1014px) {
+  body {
+    --pad-top: 273px; --col-pad: 64px; --col-max: 560px; --col-gap: 36px;
+    --mark: 116px; --wordmark: 42px; --tagline: 20px; --small: 15.5px;
+    --action: 344px; --watermark: 460px;
+  }
+}
+@media (max-width: 612px) {
+  body {
+    --pad-top: 161px; --col-pad: 26px; --col-max: 390px; --col-gap: 26px;
+    --mark: 88px; --wordmark: 33px; --tagline: 17px; --small: 14.5px;
+    --action: 100%; --watermark: 300px;
+  }
+}
+
+/* ------------------------------------------------------------------ links
+ *
+ * The face is `web/src/link.css`'s, and the sign-in page's `.secondary`
+ * carries the same three declarations for the same reason -- dotted 1px at
+ * 3px offset, solid 1.5px on hover. Underlined at rest because the iPad this
+ * site is read on has no hover.
+ *
+ * **600 is the one deliberate departure from `.secondary`.** That control is
+ * a de-emphasised way out from under a white button; on the landing page
+ * these links are the only controls there is, and `link.css` states an
+ * action link takes the accent and 600. Reported rather than taken quietly.
+ */
+a {
+  color: #0e6455;
+  font-weight: 600;
+  text-decoration: underline dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+a:hover {
+  text-decoration-style: solid;
+  text-decoration-thickness: 1.5px;
+}
+/* The sign-in page's own focus ring, off `.address:focus-visible`. */
+a:focus-visible { outline: 2px solid #0e6455; outline-offset: 1px; border-radius: 2px; }
+
+/* **A 44px touch target that costs the copied rhythm nothing.** A link
+   standing on its own -- in the landing page's `nav`, in a contact line, in
+   a document's footer -- gets 13px top and bottom on a line box of about
+   20px, which gets a finger to 46px. That pad is invisible, and left alone
+   it would push each group 26px further down than the sign-in page's
+   `.action` sits; the negative margins give exactly that pad back, so the
+   gaps a reader SEES are the copied ones.
+
+   Scoped, because a link inside running prose must NOT be an inline-block
+   with 13px of padding -- in a wrapped paragraph that overlaps the lines
+   above and below it. In prose a link takes the face above and the size of
+   the sentence it sits in, and nothing more. */
+nav a, .contact a {
+  display: inline-block;
+  font-size: var(--small);
+  padding: 13px 4px;
+}
+nav, .contact { margin: -13px 0; }
+
+/* The row itself. Column-gap is the separator's room; row-gap is what keeps
+   the links readable if a narrow phone wraps them. The landing page centres
+   this row under its lockup; a document's footer leaves it ranged left with
+   the prose above it, which is flex's own default. */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 28px;
+}
+
+/* -------------------------------------------------- the document pages
+ *
+ * /privacy and /terms are a page type the sign-in page has no equivalent of,
+ * so the four rules below are this repo's own. They are derived from the
+ * scale above rather than being a second answer to it: the title is
+ * `--wordmark`, the running text is `--tagline`, and `--section` is the one
+ * step the scale was missing between them. No new colour, no second face.
+ *
+ * The measure is in `ch`, so the readable line length is a count of
+ * characters at whatever size the breakpoint above has chosen -- it cannot
+ * fall out of step with the type the way a pixel width would. It is written
+ * on `.doc` and NOT hoisted into a variable up here, because `ch` is
+ * resolved where it is DECLARED: on `body`, which carries no font-size of
+ * its own, `62ch` silently means 62 characters of the browser's 16px
+ * default and stops tracking the scale entirely. Measured in the browser at
+ * 1440px: it came out a fixed 493px at every breakpoint. */
+body { --section: 27px; }
+@media (max-width: 1014px) { body { --section: 25px; } }
+@media (max-width: 612px)  { body { --section: 21px; } }
+
+/* The top pad is NOT `--pad-top`. That value drops the landing page's lockup
+   to where a family meets it one click later; a document has a title at the
+   top and wants to start near the top of the screen. */
+.page {
+  min-height: 100%;
+  padding: 56px var(--col-pad) calc(64px + env(safe-area-inset-bottom));
+}
+@media (max-width: 612px) { .page { padding-top: 34px; } }
+
+.doc {
+  display: block;
+  width: 100%;
+  /* The prose size lives here so the `ch` below resolves against it, and so
+     every child inherits the running-text size without restating it. */
+  font-size: var(--tagline);
+  max-width: 58ch;
+  margin: 0 auto;
+  /* Left-ranged, unlike the landing page. Three centred lines under a mark
+     are a lockup; nine pages of centred prose are unreadable. */
+  text-align: left;
+  /* A long address or a long hyphenated run must break rather than push the
+     column sideways on a 320px phone. */
+  overflow-wrap: break-word;
+}
+
+.doc h1 {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -.015em;
+  line-height: 1;
+  font-size: var(--wordmark);
+}
+/* The date, at the size and the muted ink the site gives its small text. */
+.doc .updated {
+  margin: 14px 0 0;
+  color: #4a4f52;
+  font-size: var(--small);
+}
+.doc h2 {
+  margin: 1.9em 0 0;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1.2;
+  font-size: var(--section);
+}
+.doc p, .doc li {
+  margin: 0;
+  line-height: 1.45;
+}
+/* The site's line-height is 1.45 and stays 1.45. A document gets its air
+   between paragraphs instead of inside them, which leaves the reading
+   texture identical to the landing page's line. */
+.doc p { margin-top: .85em; }
+.doc h2 + p { margin-top: .6em; }
+.doc strong { font-weight: 600; }
+
+.doc ul { margin: .85em 0 0; padding-left: 1.15em; }
+.doc li { margin-top: .4em; padding-left: .2em; }
+.doc li::marker { color: #b8783c; }
+
+/* The way back. Sits below a rule at the muted ink, and holds the same three
+   links the landing page holds. */
+.doc .footer {
+  margin-top: 2.6em;
+  padding-top: 1.4em;
+  border-top: 1px solid #e6e1d7;
+}
